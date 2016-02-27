@@ -3,6 +3,8 @@
  */
 package com.weebly.gaborcsikos.java.swing;
 
+import com.weebly.gaborcsikos.java.swing.mainform.MainWindow;
+
 /**
  * @author Gabor Csikos
  *
