@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import com.weebly.gaborcsikos.java.swing.LayoutExamples;
+
 /**
  * @author Gabor Csikos
  * 
@@ -51,13 +53,23 @@ public class MainWindow extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem exit = new JMenuItem("Exit");
+		// Examples
+		JMenuItem showLayouts = new JMenuItem("Layout examples");
+		showLayouts.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				LayoutExamples examples = new LayoutExamples();
+				examples.showWindow();
+			}
+		});
+
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showExitDialog();
 			}
 
 		});
-
+		fileMenu.add(showLayouts);
 		fileMenu.add(exit);
 		menuBar.add(fileMenu);
 		this.setJMenuBar(menuBar);
