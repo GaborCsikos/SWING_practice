@@ -17,6 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import com.weebly.gaborcsikos.java.swing.LayoutExamples;
+import com.weebly.gaborcsikos.java.swing.tabbed.TabbedPaneExample;
 
 /**
  * @author Gabor Csikos
@@ -58,8 +59,19 @@ public class MainWindow extends JFrame {
 		JMenuItem exit = new JMenuItem("Exit");
 		// Examples
 		JMenuItem showLayouts = new JMenuItem("Layout examples");
+		JMenuItem tabbedPane = new JMenuItem("tabbed pane examples");
+
+		tabbedPane.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TabbedPaneExample pane = new TabbedPaneExample(getFrame());
+				pane.showDialog();
+			}
+		});
 		showLayouts.addActionListener(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				LayoutExamples examples = new LayoutExamples();
 				examples.showWindow();
@@ -67,15 +79,21 @@ public class MainWindow extends JFrame {
 		});
 
 		exit.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				showExitDialog();
 			}
 
 		});
 		fileMenu.add(showLayouts);
+		fileMenu.add(tabbedPane);
 		fileMenu.add(exit);
 		menuBar.add(fileMenu);
 		this.setJMenuBar(menuBar);
+	}
+
+	protected JFrame getFrame() {
+		return this;
 	}
 
 	void showExitDialog() {
