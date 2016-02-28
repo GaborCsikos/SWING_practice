@@ -2,12 +2,15 @@ package com.weebly.gaborcsikos.java.swing.mainform;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
@@ -23,6 +26,7 @@ public class FormPanel extends JPanel {
 	private final JTextField usernameField;
 	private final JPasswordField passwordField;
 	private final JButton loginButton;
+	private JTextArea textArea;
 
 	public FormPanel() {
 		usernameLabel = new JLabel("login:");
@@ -44,6 +48,17 @@ public class FormPanel extends JPanel {
 		addPasswordLabel(gc);
 		addPasswordField(gc);
 		addOkButton(gc);
+
+		loginButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				textArea.append("Your username is:" + usernameField.getText()
+						+ "\n");
+				textArea.append("Your password is:"
+						+ passwordField.getPassword() + "\n");
+
+			}
+		});
 
 		setVisible(true);
 	}
@@ -100,4 +115,7 @@ public class FormPanel extends JPanel {
 
 	}
 
+	public void setTextArea(JTextArea textArea) {
+		this.textArea = textArea;
+	}
 }

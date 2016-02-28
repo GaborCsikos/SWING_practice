@@ -13,6 +13,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import com.weebly.gaborcsikos.java.swing.LayoutExamples;
@@ -27,6 +28,7 @@ public class MainWindow extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private JTextArea textArea;
 
 	public void init() {
 		// JFame settings
@@ -42,8 +44,9 @@ public class MainWindow extends JFrame {
 		this.add(formPanel, BorderLayout.WEST);
 
 		// add textArea
-		JPanel textPanel = new TextAreaPanel();
-		this.add(textPanel, BorderLayout.CENTER);
+		textArea = new JTextArea();
+		this.add(textArea, BorderLayout.CENTER);
+		((FormPanel) formPanel).setTextArea(textArea);
 
 		this.setVisible(true);
 	}
