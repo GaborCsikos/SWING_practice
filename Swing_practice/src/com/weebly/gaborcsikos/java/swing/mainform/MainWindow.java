@@ -17,6 +17,8 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import com.weebly.gaborcsikos.java.swing.LayoutExamples;
+import com.weebly.gaborcsikos.java.swing.about.AboutDialog;
+import com.weebly.gaborcsikos.java.swing.about.LoginDialog;
 import com.weebly.gaborcsikos.java.swing.tabbed.TabbedPaneExample;
 
 /**
@@ -56,7 +58,10 @@ public class MainWindow extends JFrame {
 		// MenuBar has Menus, each Menu has a MenuItem
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
+		JMenu aboutMenu = new JMenu("About");
 		JMenuItem exit = new JMenuItem("Exit");
+		JMenuItem about = new JMenuItem("About");
+		JMenuItem login = new JMenuItem("One line login screen");
 		// Examples
 		JMenuItem showLayouts = new JMenuItem("Layout examples");
 		JMenuItem tabbedPane = new JMenuItem("tabbed pane examples");
@@ -85,11 +90,40 @@ public class MainWindow extends JFrame {
 			}
 
 		});
+		about.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showAboutDialog();
+			}
+		});
+		login.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showLoginDialog();
+			}
+		});
 		fileMenu.add(showLayouts);
 		fileMenu.add(tabbedPane);
 		fileMenu.add(exit);
+		aboutMenu.add(about);
+		aboutMenu.add(login);
 		menuBar.add(fileMenu);
+		menuBar.add(aboutMenu);
 		this.setJMenuBar(menuBar);
+	}
+
+	protected void showLoginDialog() {
+		LoginDialog dialog = new LoginDialog(this);
+		dialog.showDialog();
+
+	}
+
+	protected void showAboutDialog() {
+		AboutDialog dialog = new AboutDialog(this);
+		dialog.showDialog();
+
 	}
 
 	protected JFrame getFrame() {

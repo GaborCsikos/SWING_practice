@@ -51,11 +51,12 @@ public class FormPanel extends JPanel {
 
 		loginButton.addActionListener(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				textArea.append("Your username is:" + usernameField.getText()
 						+ "\n");
 				textArea.append("Your password is:"
-						+ passwordField.getPassword() + "\n");
+						+ new String(passwordField.getPassword()) + "\n");
 
 			}
 		});
