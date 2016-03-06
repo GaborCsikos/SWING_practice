@@ -4,6 +4,7 @@
 package com.weebly.gaborcsikos.java.swing.mainform;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -27,18 +28,22 @@ import com.weebly.gaborcsikos.java.swing.tabbed.TabbedPaneExample;
  */
 public class MainWindow extends JFrame {
 
+	private static final String MAIN_CARD = "main";
+	private static final String BOOKING_CARD = "booking";
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTextArea textArea;
+	private CardLayout cards;
+	private FlightReservation flightReservation;
 
 	public void init() {
 		// JFame settings
 		this.setSize(800, 600);
 		this.setTitle("Example");
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
+		cards = new CardLayout();
 		// Add menu
 		addMenu();
 
@@ -51,6 +56,16 @@ public class MainWindow extends JFrame {
 		this.add(textArea, BorderLayout.CENTER);
 		((FormPanel) formPanel).setTextArea(textArea);
 
+		JPanel firstCard = new JPanel(new BorderLayout());
+		firstCard.add(formPanel, BorderLayout.WEST);
+		firstCard.add(textArea, BorderLayout.CENTER);
+
+		cards.addLayoutComponent(firstCard, MAIN_CARD);
+		flightReservation = new FlightReservation();
+		cards.addLayoutComponent(flightReservation, BOOKING_CARD);
+		this.setLayout(cards);
+		cards.show(this.getContentPane(), MAIN_CARD);
+		this.add(firstCard);
 		this.setVisible(true);
 	}
 
@@ -62,6 +77,7 @@ public class MainWindow extends JFrame {
 		JMenuItem exit = new JMenuItem("Exit");
 		JMenuItem about = new JMenuItem("About");
 		JMenuItem login = new JMenuItem("One line login screen");
+		JMenuItem flights = new JMenuItem("Flights");
 		// Examples
 		JMenuItem showLayouts = new JMenuItem("Layout examples");
 		JMenuItem tabbedPane = new JMenuItem("tabbed pane examples");
@@ -104,14 +120,27 @@ public class MainWindow extends JFrame {
 				showLoginDialog();
 			}
 		});
+		flights.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showFlights();
+
+			}
+		});
 		fileMenu.add(showLayouts);
 		fileMenu.add(tabbedPane);
+		fileMenu.add(flights);
 		fileMenu.add(exit);
 		aboutMenu.add(about);
 		aboutMenu.add(login);
 		menuBar.add(fileMenu);
 		menuBar.add(aboutMenu);
 		this.setJMenuBar(menuBar);
+	}
+
+	protected void showFlights() {
+		cards.show(this.getContentPane(), BOOKING_CARD);
 	}
 
 	protected void showLoginDialog() {
