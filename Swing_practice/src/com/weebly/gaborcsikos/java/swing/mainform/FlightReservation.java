@@ -5,6 +5,9 @@ package com.weebly.gaborcsikos.java.swing.mainform;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Calendar;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -13,10 +16,14 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.JSpinner;
+import javax.swing.ListModel;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SpinnerModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -27,18 +34,19 @@ import javax.swing.border.TitledBorder;
  */
 public class FlightReservation extends JDialog {
 
-	private final String[] flights = { "Budapest", "Moscow", "Kazahstan" };
 	private final JComboBox<String> fromCb;
 	private final JComboBox<String> toCb;
 
 	private final JRadioButton firstClass;
 	private final JRadioButton business;
+	private final JRadioButton tourist;
 
 	private final JButton searchButton;
 	private final JButton purchaseButton;
 	private final JButton exitButton;
 
-	private final JTextField date;
+	private final JSpinner date;
+	private final JList<String> table;
 
 	/**
 	 * 
@@ -48,16 +56,26 @@ public class FlightReservation extends JDialog {
 	public FlightReservation() {
 		this.setModal(true);
 		this.setTitle("Flight reservation");
-		this.setSize(400, 200);
+		this.setSize(800, 600);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		JPanel flightPanel = new JPanel();
 		flightPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		flightPanel.setLayout(new GridLayout(3, 2, 5, 5));
-		date = new JTextField();
+		SpinnerModel dateModel = new SpinnerDateModel(FlightFactory.createDate(
+				11, 30),
+		// initial value
+				FlightFactory.createDate(11, 30),
+				// Minimum value - not set
+				null,
+				// Maximum value - not set
+				Calendar.MINUTE
+		// Step
+		);
+		date = new JSpinner(dateModel);
 		flightPanel.add(new JLabel("Date:"));
-		flightPanel.add(date); // TODO add Datefilter
+		flightPanel.add(date);
 		flightPanel.add(new JLabel("From:"));
 
 		fromCb = new JComboBox<String>();
@@ -79,13 +97,20 @@ public class FlightReservation extends JDialog {
 		business = new JRadioButton("Business");
 		group.add(business);
 		optionPanel.add(business);
+		optionPanel.add(firstClass);
+		tourist = new JRadioButton("Tourist");
+		group.add(tourist);
+		optionPanel.add(tourist);
+		tourist.setSelected(true);
 		mainPanel.add(optionPanel);
 		getContentPane().add(mainPanel, BorderLayout.NORTH);
 		JPanel infoPanel = new JPanel(new BorderLayout());
 		infoPanel.setBorder(new TitledBorder(new EtchedBorder(),
 				"Available Flights"));
-		JList<String> list = new JList<String>();
-		JScrollPane ps = new JScrollPane(list);
+		table = new JList<String>();
+		ListModel<String> model = new FlightModel();
+		table.setModel(model);
+		JScrollPane ps = new JScrollPane(table);
 		infoPanel.add(ps, BorderLayout.CENTER);
 		getContentPane().add(infoPanel, BorderLayout.CENTER);
 		JPanel buttonPanel = new JPanel();
@@ -98,10 +123,54 @@ public class FlightReservation extends JDialog {
 		buttonPanel.add(exitButton);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
+		addActionListeners();
+
+	}
+
+	private void addActionListeners() {
+		exitButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		searchButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (((String) toCb.getSelectedItem()).equals(fromCb
+						.getSelectedItem())) {
+					showInformation("From and to flights are the same");
+				} else {
+					showInformation("Not implemented, this tutorial is about Swing");
+				}
+			}
+		});
+		purchaseButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				purchase();
+
+			}
+		});
+	}
+
+	protected void purchase() {
+		if (table.getSelectedValue() != null) {
+			JOptionPane.showMessageDialog(this, table.getSelectedValue()
+					.toString() + " purchased");
+		}
+
+	}
+
+	protected void showInformation(String msg) {
+		JOptionPane.showMessageDialog(this, msg);
 	}
 
 	private void addAllOptions(JComboBox<String> cb) {
-		for (String flight : flights) {
+		for (String flight : FlightFactory.FLIGHTS) {
 			cb.addItem(flight);
 		}
 
